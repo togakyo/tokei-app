@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>とけいが よめるアプリ ｜ あそぶ</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=M+PLUS+Rounded+1c:wght@500;800&family=Noto+Sans+JP:wght@400;500;700&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root{
+  --ink:#16222E;
+  --paper:#E7EDF2;
+  --card:#FFFFFF;
+  --hour:#D9482B;
+  --minute:#2C6FD1;
+  --done:#E8A803;
+  --muted:#66788A;
+  --line:#C9D5DF;
+  --r:14px;
+}
+*{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%}
+body{
+  margin:0;background:var(--paper);color:var(--ink);
+  font-family:"Noto Sans JP",system-ui,sans-serif;
+  font-size:16px;line-height:1.85;
+}
+.wrap{max-width:760px;margin:0 auto;padding:32px 20px 72px}
+.eyebrow{
+  font-family:"DM Mono",ui-monospace,monospace;
+  font-size:12px;letter-spacing:.16em;text-transform:uppercase;
+  color:var(--muted);margin:0 0 6px;
+}
+h1{
+  font-family:"M PLUS Rounded 1c","Noto Sans JP",sans-serif;
+  font-weight:800;font-size:clamp(28px,6vw,44px);
+  line-height:1.25;margin:0 0 10px;letter-spacing:.01em;
+}
+h2{
+  font-family:"M PLUS Rounded 1c","Noto Sans JP",sans-serif;
+  font-weight:800;font-size:22px;margin:0 0 14px;
+}
+p{margin:0 0 12px}
+a{color:var(--minute)}
+a:focus-visible{outline:3px solid var(--minute);outline-offset:3px;border-radius:4px}
+
+.card{
+  background:var(--card);border:1px solid var(--line);
+  border-radius:var(--r);padding:26px;margin-bottom:16px;
+}
+
+/* ---- あそぶボタン ---- */
+.play{
+  display:flex;align-items:center;justify-content:center;gap:12px;
+  font-family:"M PLUS Rounded 1c","Noto Sans JP",sans-serif;
+  font-weight:800;font-size:26px;text-decoration:none;
+  background:var(--hour);color:#fff;
+  border-radius:var(--r);padding:20px 24px;
+  box-shadow:0 3px 0 #A8341D;
+}
+.play:hover{filter:brightness(1.06)}
+.play:active{transform:translateY(2px);box-shadow:0 1px 0 #A8341D}
+.play .dot{
+  width:34px;height:34px;border-radius:50%;
+  background:#fff;color:var(--hour);
+  display:grid;place-items:center;font-size:18px;
+}
+.sub{text-align:center;color:var(--muted);font-size:14px;margin:10px 0 0}
+
+/* ---- つかいかた ---- */
+ol.steps{margin:0;padding-left:1.3em}
+ol.steps li{margin-bottom:8px}
+.hour-b{color:var(--hour);font-weight:700}
+.minute-b{color:var(--minute);font-weight:700}
+
+.note{
+  background:#FFF8E4;border:1px solid #EBD68C;border-radius:10px;
+  padding:14px 16px;font-size:14px;margin:16px 0 0;
+}
+
+footer{color:var(--muted);font-size:13px;text-align:center;margin-top:28px}
+footer a{color:var(--muted)}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <p class="eyebrow">Tokei Project</p>
+  <h1>とけいが よめるアプリ</h1>
+  <p>カメラに とけいを かざすと、<span class="hour-b">赤い数字＝時</span>・<span class="minute-b">青い数字＝分</span> の
+  ガイドが うっすら かさなります。それを見ながら 自分で読んで、答えを入れると ○×が つきます。</p>
+
+  <div class="card">
+    <a class="play" id="play" href="#"><span class="dot">▶</span>あそぶ</a>
+    <p class="sub">ブラウザで うごきます（さいしんばん・<span id="updated">—</span> こうしん）</p>
+  </div>
+
+  <div class="card">
+    <h2>あそびかた</h2>
+    <ol class="steps">
+      <li>「あそぶ」を おす → TurboWarp という サイトが ひらきます</li>
+      <li>みどりの旗 🏳 を おす</li>
+      <li><strong>「カメラを つかっても いいですか？」と 聞かれたら「許可」</strong> を おす</li>
+      <li>カメラに うでどけいや かべの とけいを かざす</li>
+      <li>ガイドを 見ながら「なん時？」「なん分？」に こたえる</li>
+    </ol>
+    <p class="note">📷 カメラの えいぞうは、じぶんの パソコンの中だけで つかわれます。どこにも おくられません。</p>
+  </div>
+
+  <footer>
+    <a href="https://github.com/togakyo/tokei-app">GitHub</a>
+  </footer>
+
+</div>
+
+<script>
+// publish.sh が こうしんの たびに 書きかえます
+// BUILD:START
+var BUILD = "20260825-2031";
+// BUILD:END
+
+// GitHub Pages で ひらいたときは そのアドレス、それ以外は こうかい先を つかう
+var BASE = (location.protocol === "https:")
+  ? location.href.split("?")[0].split("#")[0].replace(/[^/]*$/, "")
+  : "https://togakyo.github.io/tokei-app/";
+
+// TurboWarp は project_url= で sb3 を そのまま よみこめる。
+// ?v= は ファイル名が ずっと同じでも 古いものが のこらないように するため。
+document.getElementById("play").href =
+  "https://turbowarp.org/?project_url=" + BASE + "scratch/tokei_master.sb3?v=" + BUILD;
+
+document.getElementById("updated").textContent =
+  BUILD.slice(4, 6).replace(/^0/, "") + "月" + BUILD.slice(6, 8).replace(/^0/, "") + "日";
+</script>
+</body>
+</html>
